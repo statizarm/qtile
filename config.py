@@ -41,8 +41,6 @@ BROWSER = "brave"
 TERMINAL = guess_terminal()
 
 
-# TODO: wpctl volume widget. Or just use pactl volume widget?
-#       - *Button1/Button2 next/prev syncs
 # TODO: colorscheme and wallpaper
 #       - Palette
 #       - Fix wallpaper
