@@ -23,6 +23,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import os
 
 from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -39,20 +40,25 @@ SHIFT = "shift"
 
 BROWSER = "brave"
 TERMINAL = guess_terminal()
+WALLPAPER_FILENAME = "samurai-pixel-art-corrected.jpg"
 
 
-# TODO: colorscheme and wallpaper
-#       - Palette
-#       - Fix wallpaper
 # TODO: beauty bar
-#       - groups display name
+#       - groups display name as icons
 #       - Pretty nice date and time format
 #       - Pretty nice widgets
+#       - Nerd fonts
+#       - Sections for cpu ram hdd: e.g. https://www.reddit.com/r/unixporn/comments/16x82rl/qtile_tokyo_night_storm/#lightbox
 # TODO: group and screen for projector
 #       - Copy of first screen
 #       - Bind screen to projector device?
 #       - group with stack layout?
 #       - Union groups in bar per screen?
+# TODO: colorscheme
+#       - palette
+#       - colors from palette for browser
+#       - colors from palette for term
+#       - colors from palette for nvim?
 # TODO: layout independent key bindings
 #       - New key class inherits from base Key class
 #       - keysym mappings
@@ -62,6 +68,17 @@ TERMINAL = guess_terminal()
 # TODO: Various bindings
 #       - Goto last browser window
 #       - Switch to specific screen
+
+
+colors = {
+    'color1': '#180F2B',
+    'color2': '#28173F',
+    'color3': '#382754',
+    'color4': '#181936',
+    'color5': '#262545',
+    'color6': '#FE95B4',
+    'color7': '#E1D4F3',
+}
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -187,10 +204,18 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
+                widget.CurrentLayout(
+                    background=colors['color1'],
+                ),
+                widget.GroupBox(
+                    background=colors['color1'],
+                ),
+                widget.Prompt(
+                    background=colors['color1'],
+                ),
+                widget.WindowName(
+                    background=colors['color1'],
+                ),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
@@ -198,28 +223,38 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.StatusNotifier(
-                    background='#282738',
+                    background=colors['color1'],
                     fontsize=13,
                 ),
                 WirePlumberVolume(
                     emoji=True,
-                    background='#282738',
+                    background=colors['color1'],
                     fontsize=15,
                 ),
                 KeyboardLayout(
+                    background=colors['color1'],
                     configured_keyboards=["us", "ru"],
                     option="caps:none"
                 ),
-                widget.NetGraph(),
+                widget.NetGraph(
+                    background=colors['color1'],
+                ),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.QuickExit(),
+                widget.Clock(
+                    background=colors['color1'],
+                    format="%Y-%m-%d %a %I:%M %p",
+                ),
             ],
-            32,
+            36,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
+        wallpaper=os.path.join(
+            os.path.expandvars('$XDG_CONFIG_HOME/qtile/assets/wallpapers'),
+            WALLPAPER_FILENAME,
+        ),
+        wallpaper_mode='fill',
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
